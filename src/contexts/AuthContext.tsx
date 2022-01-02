@@ -25,11 +25,15 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
 
   useEffect(() => {
     const auth = getAuth();
-    onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUserState(user)
       }
     })
+
+    return () => {
+        unsubscribe()
+    }
   }, [user])
 
   async function signInWithGoogle() {
