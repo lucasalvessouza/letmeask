@@ -1,16 +1,37 @@
 import { useParams } from 'react-router-dom'
 import logoImg from '../assets/images/logo.svg'
-import likeImg from '../assets/images/like.svg'
 import { Button } from '../components/Button'
 
 import '../styles/room.scss'
 import { RoomCode } from '../components/RoomCode'
 import { useAuth } from '../hooks/useAuth'
-import { FormEvent, useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 import { database } from '../services/firebase'
+import { Question } from '../components/Question'
 
 type RoomParams = {
   id: string;
+}
+
+type FirebaseQuestions = Record<string, {
+  author: {
+    name: string
+    avatar: string
+  }
+  content: string
+  isAnswered: boolean,
+  isHighlighted: boolean
+}>
+
+type QuestionType = {
+  id: string
+  author: {
+    name: string
+    avatar: string
+  }
+  content: string
+  isAnswered: boolean,
+  isHighlighted: boolean
 }
 
 export function Room() {
@@ -18,6 +39,29 @@ export function Room() {
   const { id: roomId } = useParams<RoomParams>();
 
   const [newQuestion, setNewQuestion] = useState('')
+  const [questions, setQuestions] = useState<QuestionType[]>([])
+  const [title, setTitle] = useState()
+
+  useEffect(() => {
+    const roomRef = database.ref(`rooms/${roomId}`)
+
+    roomRef.on('value', room => {
+      const databaseRoom = room.val()
+      const firebaseQuestions: FirebaseQuestions = databaseRoom.questions ?? {}
+      const parsedQuestions = Object.entries(firebaseQuestions).map(([key, value]) => {
+          return {
+            id: key,
+            content: value.content,
+            author: value.author,
+            isHighlighted: value.isHighlighted,
+            isAnswered: value.isAnswered
+          }
+        })
+      
+      setTitle(databaseRoom.title)
+      setQuestions(parsedQuestions)
+    })
+  }, [roomId])
 
   async function handleNewQuestion(event: FormEvent) {
     event.preventDefault()
@@ -58,8 +102,8 @@ export function Room() {
 
       <main>
         <div className="room-title">
-          <h1>Sala React</h1>
-          <span>4 perguntas</span>
+          <h1>Sala {title}</h1>
+          { questions.length > 0 && <span>{questions.length} pergunta(s)</span> }
         </div>
         <form>
           <textarea
@@ -88,21 +132,12 @@ export function Room() {
           </div>
         </form>
 
-        <div className="room-question">
-          <p>
-            Olá, eu gostaria de saber como criar componentes funcionais dentro do React e se existe diferença na performance entre um componente com classes.
-          </p>
-          <div className="question-footer">
-            <div>
-              {/* <img src="" alt="" />  */}
-              <span className='question-author'>Rachel Laguna Martins</span>
-            </div>
-
-            <div>
-              <span className='question-like-count'>16</span>
-              <img src={likeImg} alt="Like" />
-            </div>
-          </div>
+        <div className='question-list'>
+          {
+            questions.map((question) => (
+              <Question  {...question} key={question.id} />
+            ))
+          }
         </div>
       </main>
     </div>
