@@ -53,9 +53,12 @@ export function useRoom(roomId: string) {
             likeId: Object.entries(value.likes ?? {}).find(([key, value]) => value.userId === user?.id)?.[0]
           }
         })
+
+      const answeredQuestions = parsedQuestions.filter(question => question.isAnswered)
+      const questionsNotAnswered = parsedQuestions.filter(question => !question.isAnswered)
       
       setTitle(databaseRoom.title)
-      setQuestions(parsedQuestions)
+      setQuestions([...questionsNotAnswered, ...answeredQuestions])
     })
 
     return (() => {

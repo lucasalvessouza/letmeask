@@ -9,6 +9,10 @@
     background: #f2effa;
   }
 
+  &.answered {
+    background: #d3d3d4;
+  }
+
   & + .question {
     margin-top: 8px;
   }
@@ -53,6 +57,23 @@
         color: #835afd;
 
         svg path {
+          stroke: #835afd;
+        }
+      }
+
+      &:hover {
+        filter: brightness(0.8)
+      }
+    }
+
+    .answered-button {
+      color: #737380;
+      gap: 8px;
+
+      &.answered {
+        color: #835afd;
+
+        svg path, circle {
           stroke: #835afd;
         }
       }
