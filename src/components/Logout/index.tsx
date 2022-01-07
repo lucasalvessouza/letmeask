@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { Button } from "../Button";
@@ -9,6 +10,7 @@ export function Logout() {
   
   async function handleLogout() {
     await logout()
+    toast.success('Logout concluido!')
     navigate('/')
   }
 

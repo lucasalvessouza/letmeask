@@ -10,6 +10,7 @@ import { database } from '../services/firebase'
 import { Question } from '../components/Question'
 import { useRoom } from '../hooks/useRoom'
 import { Logout } from '../components/Logout'
+import toast from 'react-hot-toast'
 
 type RoomParams = {
   id: string;
@@ -51,6 +52,12 @@ export function Room() {
   }
 
   async function handleLikeQuestion(questionId: string, likeId?: string) {
+    if (!user) {
+      toast.error('Você precisa estar logado para dar like!', {
+        icon: '⚠️',
+      })
+    }
+
     const question = questions.find(question => question.id === questionId)
     if (!question) {
       return

@@ -12,6 +12,7 @@ import { database } from '../services/firebase'
 import { useEffect } from 'react'
 import { Logout } from '../components/Logout'
 import { useAuth } from '../hooks/useAuth'
+import toast from 'react-hot-toast'
 
 type RoomParams = {
   id: string;
@@ -33,6 +34,7 @@ export function AdminRoom() {
   async function handleDeleteQuestion(questionId: string) {
     if (window.confirm('Você tem certeza que deseja excluir essa pergunta?')) {
       await database.ref(`rooms/${roomId}/questions/${questionId}`).remove()
+      toast.success('Pergunta excluída com sucesso!')
     }
   }
 
@@ -46,6 +48,9 @@ export function AdminRoom() {
     await database.ref(`rooms/${roomId}/questions/${questionId}`).update({
       isAnswered: !isAnswered
     })
+    if (!isAnswered) {
+      toast.success('Pergunta concluida!')
+    }
   }
 
   async function handleCloseRoom() {
@@ -53,6 +58,7 @@ export function AdminRoom() {
       await database.ref(`rooms/${roomId}`).update({
         closedAt: Date.now()
       })
+      toast.success('Sala encerrada com sucesso!')
       navigate('/')
     }
   }

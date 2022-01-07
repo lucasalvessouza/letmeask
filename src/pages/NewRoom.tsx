@@ -7,6 +7,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { FormEvent, useState } from 'react'
 import { database } from '../services/firebase'
+import toast from 'react-hot-toast'
 
 export function NewRoom() {
     const [newRoom, setNewRoom] = useState('');
@@ -26,6 +27,8 @@ export function NewRoom() {
             title: newRoom,
             userId: user?.id 
         })
+
+        toast.success('Sala criada com sucesso')
 
         navigate(`/rooms/${firebaseRoom.key}`)
     }

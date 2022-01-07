@@ -8,6 +8,7 @@ import { Button } from '../components/Button'
 import { useAuth } from '../hooks/useAuth'
 import { FormEvent, useState } from 'react';
 import { database } from '../services/firebase';
+import toast from 'react-hot-toast';
 
 
 export function Home() {
@@ -32,12 +33,14 @@ export function Home() {
         const roomRef = await database.ref(`rooms/${roomCode}`).get()
 
         if (!roomRef.exists()) {
-            alert("Sala não existe")
+            toast.error("Sala não existe")
             return
         }
 
         if (roomRef.val().closedAt) {
-            alert("Sala encerrada")
+            toast.error('Sala encerrada', {
+                icon: '😟',
+              });
             return
         }
 
