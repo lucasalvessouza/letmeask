@@ -10,6 +10,7 @@ type User = {
 type AuthContextType = {
     user?: User | undefined
     signInWithGoogle: () => Promise<void>
+    logout: () => Promise<void>
 }
 
 type AuthContextProviderProps = {
@@ -28,7 +29,9 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUserState(user)
+        return
       }
+      resetUser()
     })
 
     return () => {
@@ -45,6 +48,11 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
     }
   }
 
+  async function logout() {
+    const auth = getAuth();
+    await auth.signOut();
+  }
+
   function setUserState(user: UserFirebase) {
     const { uid, displayName, photoURL } = user
     if (!displayName || !photoURL) {
@@ -57,8 +65,12 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
     })
   }
 
+  function resetUser() {
+    setUser(undefined)
+  }
+
     return (
-        <AuthContext.Provider value={{ user, signInWithGoogle }}>
+        <AuthContext.Provider value={{ user, signInWithGoogle, logout }}>
             {props.children}
         </AuthContext.Provider>
     )

@@ -10,6 +10,8 @@ import { Question } from '../components/Question'
 import { QuestionType, useRoom } from '../hooks/useRoom'
 import { database } from '../services/firebase'
 import { useEffect } from 'react'
+import { Logout } from '../components/Logout'
+import { useAuth } from '../hooks/useAuth'
 
 type RoomParams = {
   id: string;
@@ -17,6 +19,7 @@ type RoomParams = {
 
 
 export function AdminRoom() {
+  const { user } = useAuth();
   const { id: roomId } = useParams<RoomParams>();
   const { title, questions, userIsAdmin } = useRoom(roomId || '')
   const navigate = useNavigate()
@@ -97,6 +100,7 @@ export function AdminRoom() {
           <div>
             <RoomCode code={roomId || ''} />
             <Button variant='danger' onClick={handleCloseRoom}>Encerrar sala</Button>
+            { user && <Logout /> }
           </div>
         </div>
       </header>

@@ -9,6 +9,7 @@ import { FormEvent, useState } from 'react'
 import { database } from '../services/firebase'
 import { Question } from '../components/Question'
 import { useRoom } from '../hooks/useRoom'
+import { Logout } from '../components/Logout'
 
 type RoomParams = {
   id: string;
@@ -16,7 +17,7 @@ type RoomParams = {
 
 
 export function Room() {
-  const { user } = useAuth()
+  const { user, signInWithGoogle } = useAuth()
   const { id: roomId } = useParams<RoomParams>();
   const [newQuestion, setNewQuestion] = useState('')
   const { title, questions, userIsAdmin } = useRoom(roomId || '')
@@ -67,6 +68,10 @@ export function Room() {
     navigate(`/admin/rooms/${roomId}`)
   }
 
+  async function handleLogin() {
+    await signInWithGoogle()
+  }
+
   return (
     <div id="page-room">
       <header>
@@ -74,6 +79,7 @@ export function Room() {
           <img src={logoImg} alt="Letmeask" />
           <div>
             <RoomCode code={roomId || ''} />
+            { user && <Logout /> }
           </div>
         </div>
       </header>
@@ -107,7 +113,8 @@ export function Room() {
                   <span>{user.name}</span>
                 </div>
               ) : (
-                <span>Para enviar uma pergunta, <button>faça seu login</button>.</span>
+                <span>Para enviar uma pergunta,&nbsp;
+                <button onClick={handleLogin} type='button'>faça seu login</button>.</span>
               )
             }
             <Button
