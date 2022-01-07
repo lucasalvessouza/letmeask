@@ -70,7 +70,7 @@ export function Home() {
                         value={roomCode}
                     />
 
-                    <Button type='submit'>Entrar em uma sala</Button>
+                    <Button type='submit' disabled={!roomCode}>Entrar em uma sala</Button>
                 </form>
             </main>
         </div>
