@@ -6,11 +6,15 @@
 
   &.highlighted {
     border: 1px solid #835afd;
-    background: #f2effa;
+    background: #f4f0ff;
+
+    footer .user-info span {
+      color: #29292e;
+    }
   }
 
   &.answered {
-    background: #d3d3d4;
+    background: #d8dcd0;
   }
 
   & + .question {
@@ -44,7 +48,7 @@
       }
     }
 
-    .button-group {
+    > div {
       display: flex;
       gap: 16px;
     }
