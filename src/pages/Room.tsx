@@ -126,7 +126,7 @@ export function Room() {
             }
             <Button
               type='submit'
-              disabled={!user}
+              disabled={!user || !newQuestion}
               onClick={handleNewQuestion}
             >
               Enviar pergunta
