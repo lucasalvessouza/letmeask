@@ -8,6 +8,8 @@ import { RoomCode } from '../components/RoomCode'
 import { Question } from '../components/Question'
 import { useRoom } from '../hooks/useRoom'
 import { database } from '../services/firebase'
+import { useEffect } from 'react'
+import { useAuth } from '../hooks/useAuth'
 
 type RoomParams = {
   id: string;
@@ -16,8 +18,15 @@ type RoomParams = {
 
 export function AdminRoom() {
   const { id: roomId } = useParams<RoomParams>();
-  const { title, questions } = useRoom(roomId || '')
+  const { title, questions, roomAdminId } = useRoom(roomId || '')
   const navigate = useNavigate()
+  const { user } = useAuth()
+
+  useEffect(() => {
+    if ((roomAdminId && user?.id) && (roomAdminId !== user?.id)) {
+      navigate(`/rooms/${roomId}`)
+    }
+  }, [roomAdminId, user?.id, navigate, roomId])
 
   async function handleDeleteQuestion(questionId: string) {
     if (window.confirm('Você tem certeza que deseja excluir essa pergunta?')) {
