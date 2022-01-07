@@ -9,7 +9,6 @@ import { Question } from '../components/Question'
 import { useRoom } from '../hooks/useRoom'
 import { database } from '../services/firebase'
 import { useEffect } from 'react'
-import { useAuth } from '../hooks/useAuth'
 
 type RoomParams = {
   id: string;
@@ -18,15 +17,14 @@ type RoomParams = {
 
 export function AdminRoom() {
   const { id: roomId } = useParams<RoomParams>();
-  const { title, questions, roomAdminId } = useRoom(roomId || '')
+  const { title, questions, userIsAdmin } = useRoom(roomId || '')
   const navigate = useNavigate()
-  const { user } = useAuth()
 
   useEffect(() => {
-    if ((roomAdminId && user?.id) && (roomAdminId !== user?.id)) {
+    if (title && !userIsAdmin) {
       navigate(`/rooms/${roomId}`)
     }
-  }, [roomAdminId, user?.id, navigate, roomId])
+  }, [userIsAdmin, navigate, roomId, title])
 
   async function handleDeleteQuestion(questionId: string) {
     if (window.confirm('Você tem certeza que deseja excluir essa pergunta?')) {
@@ -54,6 +52,10 @@ export function AdminRoom() {
       navigate('/')
     }
   }
+
+  async function handleNavigateToUserSide() {
+    navigate(`/rooms/${roomId}`)
+  }
   
   return (
     <div id="page-room">
@@ -71,6 +73,9 @@ export function AdminRoom() {
         <div className="room-title">
           <h1>Sala {title}</h1>
           { questions.length > 0 && <span>{questions.length} pergunta(s)</span> }
+          <Button isOutlined onClick={handleNavigateToUserSide}>
+            Ver como usuário
+          </Button>
         </div>
         <div className='question-list'>
           {

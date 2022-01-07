@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import logoImg from '../assets/images/logo.svg'
 import { Button } from '../components/Button'
 
@@ -19,7 +19,8 @@ export function Room() {
   const { user } = useAuth()
   const { id: roomId } = useParams<RoomParams>();
   const [newQuestion, setNewQuestion] = useState('')
-  const { title, questions } = useRoom(roomId || '')
+  const { title, questions, userIsAdmin } = useRoom(roomId || '')
+  const navigate = useNavigate()
   
 
   async function handleNewQuestion(event: FormEvent) {
@@ -62,6 +63,10 @@ export function Room() {
     }
   }
 
+  async function handleNavigateToAdminSide() {
+    navigate(`/admin/rooms/${roomId}`)
+  }
+
   return (
     <div id="page-room">
       <header>
@@ -77,6 +82,14 @@ export function Room() {
         <div className="room-title">
           <h1>Sala {title}</h1>
           { questions.length > 0 && <span>{questions.length} pergunta(s)</span> }
+
+          {
+            userIsAdmin && (
+              <Button isOutlined onClick={handleNavigateToAdminSide}>
+                Ver como Admin
+              </Button>
+            )
+          }
         </div>
         <form>
           <textarea
