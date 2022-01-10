@@ -45,7 +45,7 @@ export function NewRoom() {
                     <img src={logoImg} alt="Letmeask" />
                 </div>
 
-                <h1>{user?.name}</h1>
+                <h1>Olá, {user?.name}!</h1>
 
                 <h2>Crie uma nova sala</h2>
 
@@ -60,7 +60,7 @@ export function NewRoom() {
                     <Button type='submit'>Criar sala</Button>
                 </form>
                 <p>
-                    Quer entrar em uma sala já existente? 
+                    Quer entrar em uma sala já existente?&nbsp;
                     <Link to="/">Clique aqui</Link>
                 </p>
             </main>
