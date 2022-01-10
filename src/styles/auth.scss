@@ -137,3 +137,26 @@
         }
     }
 }
+
+
+@media (max-width: 768px) {
+    #page-auth {
+        aside {
+            display: none;
+        }
+
+        .main-content {
+            max-width: 100%;
+            padding: 20%;
+        }
+    }
+}
+
+@media (max-width: 425px) {
+    #page-auth {
+        .main-content {
+            max-width: 100%;
+            padding: 10%;
+        }
+    }
+}
