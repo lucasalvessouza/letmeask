@@ -1,18 +1,15 @@
 import { useNavigate, useParams } from 'react-router-dom'
-import logoImg from '../assets/images/logo.svg'
 import deleteImg from '../assets/images/delete.svg'
 import emptyQuestionsImg from '../assets/images/empty-questions.svg'
 import { Button } from '../components/Button'
 
 import '../styles/room.scss'
-import { RoomCode } from '../components/RoomCode'
 import { Question } from '../components/Question'
 import { QuestionType, useRoom } from '../hooks/useRoom'
 import { database } from '../services/firebase'
 import { useEffect } from 'react'
-import { Logout } from '../components/Logout'
-import { useAuth } from '../hooks/useAuth'
 import toast from 'react-hot-toast'
+import { Header } from '../components/Header'
 
 type RoomParams = {
   id: string;
@@ -20,7 +17,6 @@ type RoomParams = {
 
 
 export function AdminRoom() {
-  const { user } = useAuth();
   const { id: roomId } = useParams<RoomParams>();
   const { title, questions, userIsAdmin } = useRoom(roomId || '')
   const navigate = useNavigate()
@@ -50,16 +46,6 @@ export function AdminRoom() {
     })
     if (!isAnswered) {
       toast.success('Pergunta concluida!')
-    }
-  }
-
-  async function handleCloseRoom() {
-    if (window.confirm('Você tem certeza que deseja encerrar essa sala?')) {
-      await database.ref(`rooms/${roomId}`).update({
-        closedAt: Date.now()
-      })
-      toast.success('Sala encerrada com sucesso!')
-      navigate('/')
     }
   }
 
@@ -100,16 +86,7 @@ export function AdminRoom() {
   
   return (
     <div id="page-room">
-      <header>
-        <div className="content">
-          <img src={logoImg} alt="Letmeask" />
-          <div>
-            <RoomCode code={roomId || ''} />
-            <Button variant='danger' onClick={handleCloseRoom}>Encerrar sala</Button>
-            { user && <Logout /> }
-          </div>
-        </div>
-      </header>
+      <Header roomId={roomId} />
 
       <main>
         <div className="room-title">

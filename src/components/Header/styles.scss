@@ -1,0 +1,117 @@
+header {
+  padding: 24px;
+  border-bottom: 1px solid #e2e2e2;
+
+  .content {
+    max-width: 1120px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    > img {
+      max-height: 45px;
+    }
+
+    nav {
+      display: flex;
+      gap: 16px;
+
+      button {
+        height: 40px;
+      }
+    }
+
+    .menu-section, .nav-mobile {
+      display: none;
+    }
+  }
+}
+
+@media (max-width: 780px) {
+  header {
+    .content {
+      nav {
+        display: none;
+      }
+
+      .one,
+      .two,
+      .three {
+        height: 5px;
+        width: 100%;
+        background-color: rgb(31, 31, 31);
+        border-radius: 5px;
+        margin: 6px auto;
+
+        transition-duration: 0.3s;
+      }
+
+      .menu-toggle {
+        display: block;
+        width: 40px;
+        height: 30px;
+        margin-right: 20px;
+      }
+
+      .menu-section {
+        display: block;
+      }
+
+      .menu-section.on {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+
+        background-color: #7159c1;
+
+        z-index: 10;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .menu-section.on .menu-toggle > div {
+        background: white;
+      }
+
+      .menu-section.on .nav-mobile {
+        display: block;
+        text-align: center;
+      }
+
+      .menu-section.on .nav-mobile ul a {
+        color: white;
+        transition-duration: 0.3s;
+        font-size: 2rem;
+        line-height: 6rem;
+        display: block;
+        font-family: 'Poppins', sans-serif;
+
+        text-decoration: none;
+      }
+      
+      .menu-section.on .menu-toggle {
+        position: absolute;
+        right: 34px;
+        top: 28px;
+        margin-right: 10px;
+      }
+
+      .menu-section.on .menu-toggle .one {
+        transform: rotate(45deg) translate(7px, 7px);
+      }
+
+      .menu-section.on .menu-toggle .two {
+        opacity: 0;
+      }
+
+      .menu-section.on .menu-toggle .three {
+        transform: rotate(-45deg) translate(8px, -9px);
+      }
+    }
+  }
+}

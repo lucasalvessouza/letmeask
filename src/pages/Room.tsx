@@ -1,16 +1,14 @@
 import { useNavigate, useParams } from 'react-router-dom'
-import logoImg from '../assets/images/logo.svg'
 import { Button } from '../components/Button'
 
 import '../styles/room.scss'
-import { RoomCode } from '../components/RoomCode'
 import { useAuth } from '../hooks/useAuth'
 import { FormEvent, useState } from 'react'
 import { database } from '../services/firebase'
 import { Question } from '../components/Question'
 import { useRoom } from '../hooks/useRoom'
-import { Logout } from '../components/Logout'
 import toast from 'react-hot-toast'
+import { Header } from '../components/Header'
 
 type RoomParams = {
   id: string;
@@ -81,15 +79,7 @@ export function Room() {
 
   return (
     <div id="page-room">
-      <header>
-        <div className="content">
-          <img src={logoImg} alt="Letmeask" />
-          <div>
-            <RoomCode code={roomId || ''} />
-            { user && <Logout /> }
-          </div>
-        </div>
-      </header>
+      <Header roomId={roomId} />
 
       <main>
         <div className="room-title">
